@@ -1,6 +1,15 @@
+
+
+
+
+
+
+
+
+
 /////////////////////////////
 // Lecture: Function constructor
-/*
+
 var john = {
     name: 'John',
     yearOfBirth: 1990,
@@ -30,13 +39,12 @@ mark.calculateAge();
 console.log(john.lastName);
 console.log(jane.lastName);
 console.log(mark.lastName);
-*/
 
 
 
 /////////////////////////////
 // Lecture: Object.create
-/*
+
 var personProto = {
     calculateAge: function() {
         console.log(2016 - this.yearOfBirth);
@@ -53,13 +61,13 @@ var jane = Object.create(personProto, {
     yearOfBirth: { value: 1969 },
     job: { value: 'designer' }
 });
-*/
+
 
 
 
 /////////////////////////////
 // Lecture: Primitives vs objects
-/*
+
 // Primitives
 var a = 23;
 var b = a;
@@ -78,6 +86,9 @@ var obj2 = obj1;
 obj1.age = 30;
 console.log(obj1.age);
 console.log(obj2.age);
+// NOTE - they are both 30 because obj1 and obj2 are a reference to the same variable in memory
+// 30
+// 30
 
 // Functions
 var age = 27;
@@ -95,7 +106,8 @@ change(age, obj);
 
 console.log(age);
 console.log(obj.city);
-*/
+// 21
+// San Francisco
 
 
 
@@ -201,7 +213,7 @@ game();
 
 /////////////////////////////
 // Lecture: Closures
-/*
+
 function retirement(retirementAge) {
     var a = ' years left until retirement.';
     return function(yearOfBirth) {
@@ -234,13 +246,12 @@ function interviewQuestion(job) {
 }
 
 interviewQuestion('teacher')('John');
-*/
 
 
 
 /////////////////////////////
 // Lecture: Bind, call and apply
-/*
+
 var john = {
     name: 'John',
     age: 26,
@@ -298,7 +309,7 @@ var ages = arrayCalc(years, calculateAge);
 var fullJapan = arrayCalc(ages, isFullAge.bind(this, 20));
 console.log(ages);
 console.log(fullJapan);
-*/
+
 
 
 
@@ -393,7 +404,7 @@ c) correct answer (I would use a number for this)
 */
 
 
-/*
+
 (function() {
     function Question(question, answers, correct) {
         this.question = question;
@@ -472,4 +483,3 @@ c) correct answer (I would use a number for this)
     nextQuestion();
     
 })();
-*/
