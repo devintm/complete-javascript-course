@@ -208,11 +208,14 @@ var UIController = (function() {
         */
         
         num = Math.abs(num);
+        // toFixed is a method of the primitive number data type
+        // NOTE - sets the decimals places to two
         num = num.toFixed(2);
         
         numSplit = num.split('.');
         
         int = numSplit[0];
+        // Check if the number is larger than 1,000 (larger than 3 digits)
         if (int.length > 3) {
             // Convert numbers greater than 3 in length, 23510 -> 23,510
             int = int.substr(0, int.length - 3) + ',' + int.substr(int.length -3, 3);
@@ -223,6 +226,7 @@ var UIController = (function() {
         return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
     };
     
+    // This method is used to interate over nodeLists returned from querySelectorAll
     var nodeListForEach = function(list, callback) {
         for (var i = 0; i < list.length; i++) {
             callback(list[i], i);
@@ -311,9 +315,11 @@ var UIController = (function() {
         
         
         displayPercentages: function(percentages) {
+            // NOTE - the querySelectorAll methods returns a nodeList, NOT an array
             var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-            // For each item, update the percentage using the "percentages" array
+            // For each node list item, update the percentage using the this custom
+            //   callback function
             nodeListForEach(fields, function(current, index) {
                 
                 if (percentages[index] > 0) {
@@ -329,6 +335,7 @@ var UIController = (function() {
         displayMonth: function() {
             var now, months, month, year;
             
+            // NOTE- "Date" is an object constructor so we must use the "new" keyword
             now = new Date();
             
             months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
