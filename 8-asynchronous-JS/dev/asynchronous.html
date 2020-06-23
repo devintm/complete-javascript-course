@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Asynchronous JavaScript</title>
+</head>
+<body>
+    <h1>Asynchronous JavaScript</h1>
+    <script>
+        /* NOTE - this code was executed in a iJSnotebook, so 
+         formatting is not proper. */
+        
+        
+        /* This is a basic asynchronous function which 
+        executes after 2000 milliseconds (2 seconds) */
+        const second = () => {
+            setTimeout(() => {
+                console.log('Async second() function here.');
+            }, 2000);
+        }
+        
+        /* This function calls the second() async function
+        demonstrating the most basic async program. */
+        const first = () => {
+            console.log('first() initial log.');
+            second();
+            console.log('first() final log.');
+        }
+        
+        first();
+        
+        
+        /* A mock example of multiple API requests. */
+        function getRecipe() {
+            setTimeout(() => {
+                const recipeID = [101, 102, 103, 106];
+                console.log(recipeID);
+                
+                setTimeout(id => {
+                    const recipe = {title: 'palak paneer', author: 'dev'};
+                    console.log(`${id}: ${recipe.title}`);
+
+                
+                    setTimeout(author => {
+                        const recipe2 = {title: 'carrot palya', author: 'dev'};
+                        console.log(recipe);
+
+                    }, 1500, recipe.author);
+                        
+                }, 1500, recipeID[2]);
+                
+            }, 1500);
+        }
+        getRecipe();
+        
+
+        const getIDs = new Promise((resolve, reject) => {
+           setTimeout(() => {
+               resolve([201, 205, 209, 300]);
+           }, 1500); 
+        });
+
+        const getRecipe = recID => {
+            return new Promise((resolve, reject) => {
+                setTimeout(ID => {
+                    const recipe = {title: 'palak paneer', author: 'dev'};
+                    resolve(`${ID}: ${recipe.title}`);
+                }, 1500, recID); 
+            });
+        };
+
+        const getRelated = author => {
+            return new Promise((resolve, reject) => {
+                setTimeout(auth => {
+                    const recipe = {title: 'carrot palya', author: 'dev'};
+                    resolve(`${auth}: ${recipe.title}`);
+                }, 1500, author);
+            });
+         };
+
+        /* Notice how "Promises" avoids the endless "callback hell"
+         from the previous example with multiple, chained 
+         setTimeout calls. */
+        getIDs.then(IDs => {
+            console.log(IDs);
+            return getRecipe(IDs[2]);
+        })
+        .then(recipe => {
+            console.log(recipe);
+            return getRelated('dev');
+        })
+        .then(recipe => {
+            console.log(recipe);
+        })
+        .catch(error => {
+            console.log(`Error: ${error}`);
+        });
+
+        
+        
+
+        // The use of "async" functions and "await" is very clean
+        // for chaining multiple async function calls
+        async function getRecipesAW() {
+            const IDs = await getIDs;
+            console.log(IDs);
+            const recipe = await getRecipe(IDs[2]);
+            console.log(recipe);
+            const related = await getRelated('dev miller');
+            console.log(related);
+
+            return recipe;
+        }
+        getRecipesAW().then(result => console.log(`${result} is cool!`));
+
+        
+        function getWeather(woeid) {
+            fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)
+            .then(result => {
+                console.log(result);
+                return result.json();
+            })
+            .then(data => {
+                console.log(data);
+                const today = data.consolidated_weather[0];
+                console.log(`Temperatures today in ${data.title} stay between ${today.min_temp} and ${today.max_temp}.`);
+            })
+            .catch(error => console.log(error));
+        }
+        // Get weather data for Chennai
+        getWeather(2295424);
+        // Get data for Bombay
+        getWeather(12586539);
+      
+        
+        
+        async function getWeatherAW(woeid) {
+            try {
+                const result = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+                const data = await result.json();
+                const tomorrow = data.consolidated_weather[1];
+                console.log(`Temperatures tomorrow in ${data.title} stay between ${tomorrow.min_temp} and ${tomorrow.max_temp}.`);
+                return data;
+            } catch(error) {
+                alert(error);
+            }
+        }
+        getWeatherAW(2295424);
+        
+        let dataMumbai;
+        getWeatherAW(12586539).then(data => {
+            dataMumbai = data
+            console.log(dataMumbai);
+        });
+        
+        // >>> Temperatures tomorrow in Mumbai stay between 27.59 and 30.35.
+        // >>> Temperatures tomorrow in Chennai stay between 28.34 and 33.515.
+        
+    </script>
+</body>
+</html>
